@@ -1,0 +1,13 @@
+Data Parallel Reduction
+
+1.  How many times does your thread block synchronize to reduce its portion
+    of an array to a single value?
+
+
+
+
+2.  What is the minimum, maximum, and average number of "real" operations
+    that a thread will perform? "Real" operations are those that directly
+    contribute to the final reduction value, i.e., iterations of the reduction
+    computation.
+

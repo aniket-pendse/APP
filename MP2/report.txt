@@ -1,0 +1,10 @@
+Tiled Matrix Multiplication
+
+    In your kernel implementation, how many threads can be simultaneously executing
+    on a GeForce GTX 1080 GPU, which contains 20 Streaming Multiprocessors. Use
+    nvcc --ptxas-options="-v" matrixmul_kernel.cu to see the resource usage of 
+    your kernel (although compilation will fail, it will only do so after
+    compiling the kernel and displaying the relevant information.)
+    
+    Solution:
+    GeForce GTX 1080 has 20 streaming multiprocessors (SMs). Each multiprocessor has 128 Cuda cores and each cuda core can execute one thread. Now the threads execute parallel in warps(32 threads form a warp). So that means each SM can run 128/32 that is 4 warps at a time. So in all each SM can run 128 threads at a time. That means that a total of 2560 (128*20) threads can run parallely in GeForce GTX 1080.

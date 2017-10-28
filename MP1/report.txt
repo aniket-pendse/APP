@@ -1,0 +1,20 @@
+Simple Matrix Multiplication
+
+1.  How many times is each element of the input matrices loaded during the execution of the kernel?
+    
+Answer:
+    Each row of the first matrix M is multiplied by each column of the second matrix N. So each element of a row of matrix M will be called N_c times (where N_c is the number of columns of N). Similarly each element of a column of second matrix N gets multiplied by each row of the first matrix M. So each element of N will be loaded M_r number of times (where M_r is the number of rows of M). Since, here we are dealing with square matrices each element of input matrices will be loaded n number of times (where n is the number of rows/columns of input matrix)
+ 
+2.  What is the memory-access to floating-point computation ratio in each thread?  
+    Consider a multiply and addition as separate operations, and ignore the storing 
+    of the result.  Only global memory loads should be counted towards 
+    your off-chip bandwidth
+    
+Answer:
+	Consider the following code snippet
+        for(int k=0;k < M.width;++k)
+		P_element += M.elements[row*M.width + k]*N.elements[k*M.width + col];
+    
+    This entire for loop is run by each thread. So each thread accesses 'width' number of elements from each matrix M and N. So there are '2*width' number of memory accesses by each thread. Similarly, there is a multiplication and an addition taking place for 'width' number of times. Therefore, the memory-access to floating-point computation ratio in each thread is '2*width/2*width' that is 1:1
+	
+
