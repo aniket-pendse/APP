@@ -3,6 +3,7 @@
 
 // Thread block size
 #define MATRIX_SIZE 32
+#define check_git 4
 
 // Matrix dimensions
 // (chosen as multiples of the thread block size for simplicity)
