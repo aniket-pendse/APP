@@ -1,9 +1,0 @@
-#Ignore all the .tar files
-
-*.tar
-*.zip
-#ignore all ppts
-*.ppt
-
-#Ignore .xls
-*.xls
