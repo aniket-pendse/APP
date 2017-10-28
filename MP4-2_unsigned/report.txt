@@ -12,3 +12,5 @@ Also describe any other performance-enhancing optimizations you added.
 pare with each other, and with the theoretical performance limits of each
 architecture? For your GPU implementation, discuss what bottlenecks
 are likely limiting the performance of your code.
+
+Search yourself
