@@ -11,7 +11,7 @@
 // includes, kernels
 #include "scan_largearray_kernel.cu"
 
-#define DEFAULT_NUM_ELEMENTS 16000000 
+#define DEFAULT_NUM_ELEMENTS 16777216 
 #define MAX_RAND 3
 
 
@@ -181,6 +181,9 @@ runTest( int argc, char** argv)
     // **===-----------------------------------------------------------===**
     cudaEventRecord(stop); 
     cudaEventSynchronize(stop);
+
+    //std::cout<<"outArray first element "<<d_odata[0]<<std::endl;
+
     float device_ms = 0;
     cudaEventElapsedTime(&device_ms, start, stop);
 

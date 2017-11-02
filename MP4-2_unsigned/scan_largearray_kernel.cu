@@ -184,6 +184,7 @@ void prescanArray(unsigned int *outArray, unsigned int *inArray, unsigned int nu
     for(int j = i-1;j >=0 ; j--)
     {
 	grid.x = sizes[j+1];
+	std::cout<<"Grid size for add block"<<grid.x<<std::endl;
 	add_block_sum<<<grid, block>>>(block_sum_sum[j], block_sum_sum[j+1], sizes[j]);
     }
 
@@ -192,7 +193,10 @@ void prescanArray(unsigned int *outArray, unsigned int *inArray, unsigned int nu
     else
         grid.x = numElements/(2*BLOCK_SIZE) + 1;  
 
+    //std::cout<<"First element of block_sum_sum[0][0]"<<block_sum_sum[0][0]<<std::endl;
     add_block_sum<<<grid, block>>>(outArray, block_sum_sum[0], numElements);
+
+    //std::cout<<"outArray first element "<<outArray[0]<<std::endl;
 }
 // **===-----------------------------------------------------------===**
 

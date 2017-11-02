@@ -36,7 +36,7 @@ __global__ void reduction(unsigned int *g_data, int n)
     
 
 //***********NOTE************************************************************************
-    //This method doesn't works because each thread accesses and updates g_data[0] parallel. So each thread gets the initial value of g_data and the value returned is the value returned by the last thread.
+    //This method doesn't works because each thread accesses and updates g_data[0] parallelly. So each thread gets the initial value of g_data and the value returned is the value returned by the last thread.
     
 //if(blockIdx.x >= 0 && blockIdx.x < n/(2*block_size))
 //	g_data[0] += partialsum[0];
