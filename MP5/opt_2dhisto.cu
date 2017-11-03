@@ -46,8 +46,9 @@ void deallocate_memory(uint32_t * host_bins, uint32_t * device_bin, size_t histo
     }
 */
 
-    cudaMemcpy(host_bins, device_bin, histo_height*histo_width*sizeof(uint32_t), cudaMemcpyDeviceToHost);
-
+    cudaMemcpy(host_bins, device_bin, histo_height*histo_width*sizeof(uint32_t), cudaMemcpyDeviceToHost);//Copy device bin values to temporary bin
+    cudaFree(device_bins);//Free cuda resources
+    cudaFree(d_input);
 }
 
 void opt_2dhisto(size_t height, size_t width)
@@ -57,12 +58,14 @@ void opt_2dhisto(size_t height, size_t width)
        Any memory allocations and transfers must be done 
        outside this function */
 
-    cudaMemset(device_bins, 0, HISTO_HEIGHT*HISTO_WIDTH*sizeof(uint32_t));
+    cudaMemset(device_bins, 0, HISTO_HEIGHT*HISTO_WIDTH*sizeof(uint32_t));//Since this function is being called 50 times we need to reset device bin to 0
+
     dim3 block, grid;
-    block.x = HISTO_WIDTH*HISTO_HEIGHT;
+    block.x = HISTO_WIDTH*HISTO_HEIGHT;//Set block size equal to size of histogram bin
     block.y = 1;
     block.z = 1;
     
+//Since we are looping around the input array total number of threads need not cover the entire elements of input
     if(width%(HISTO_WIDTH*HISTO_HEIGHT) == 0)
 	grid.x = width/(HISTO_WIDTH*HISTO_HEIGHT);
     else
@@ -74,6 +77,7 @@ void opt_2dhisto(size_t height, size_t width)
 
     hist_kernel<<<grid,block>>>(d_input, height, width, device_bins);    
 
+    cudaThreadSynchronize();//Synchronize each kernel call for correct timing measurement
 
 }
 
@@ -83,24 +87,24 @@ __global__ void hist_kernel(uint32_t * input, size_t height, size_t width,uint32
    
     __shared__ uint32_t private_histo[HISTO_HEIGHT*HISTO_WIDTH];
     
-    if (threadIdx.x < HISTO_WIDTH*HISTO_HEIGHT) 
+    if (threadIdx.x < HISTO_WIDTH*HISTO_HEIGHT)//Initializing the shared memory 
 	private_histo[threadIdx.x] = 0;
     
     __syncthreads();
 
-    int i = threadIdx.x + blockDim.x*blockIdx.x;
+    int i = threadIdx.x + blockDim.x*blockIdx.x;//i is an index to elements in input
     
     // stride is total number of threads
     int stride = blockDim.x * gridDim.x;
 
-    while (i < height*width) {
+    while (i < height*width) {//Looping through the input
          atomicAdd( &(private_histo[input[i]]), 1);
-         i += stride;
+         i += stride;//Incrementing by total number of threads
     }
    
     __syncthreads();
 
-    if (threadIdx.x < HISTO_WIDTH*HISTO_HEIGHT) 
+    if (threadIdx.x < HISTO_WIDTH*HISTO_HEIGHT) //Adding the calculated histogram of each block to the final histogram 
         atomicAdd( &(bins[threadIdx.x]),private_histo[threadIdx.x] );
 
 }

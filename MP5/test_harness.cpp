@@ -85,10 +85,10 @@ int main(int argc, char* argv[])
             ref_2dhisto(input, INPUT_HEIGHT, INPUT_WIDTH, gold_bins);)
 
     /* Include your setup code below (temp variables, function calls, etc.) */
-    uint32_t *temp_input = (uint32_t*)malloc(INPUT_HEIGHT*INPUT_WIDTH*sizeof(uint32_t));
-    uint32_t *temp_bins = (uint32_t*)malloc(HISTO_HEIGHT*HISTO_WIDTH*sizeof(uint32_t));
+    uint32_t *temp_input = (uint32_t*)malloc(INPUT_HEIGHT*INPUT_WIDTH*sizeof(uint32_t)); //Setup a 1D input array
+    uint32_t *temp_bins = (uint32_t*)malloc(HISTO_HEIGHT*HISTO_WIDTH*sizeof(uint32_t)); //Setup a temporary  bin array
 
-    preallocate_memory(input,INPUT_HEIGHT, INPUT_WIDTH, kernel_bins, temp_input);    
+    preallocate_memory(input,INPUT_HEIGHT, INPUT_WIDTH, kernel_bins, temp_input);//Call the memory allocation function    
 
     /* End of setup code */
 
@@ -101,13 +101,13 @@ int main(int argc, char* argv[])
 
     printf("Check deallocation \n");
 
-    deallocate_memory(temp_bins, device_bins, HISTO_HEIGHT, HISTO_WIDTH);
+    deallocate_memory(temp_bins, device_bins, HISTO_HEIGHT, HISTO_WIDTH); //Copy the device bin array to temporary bin array
 
-    for(int i = 0; i < HISTO_HEIGHT*HISTO_WIDTH; i++)
+    for(int i = 0; i < HISTO_HEIGHT*HISTO_WIDTH; i++) //This loop copies the 32 bit bin values from temporary array to 8 bit bin values
     {
 	
 	//printf("Kernel elements %d \n",device_bin[i]);
-	if(temp_bins[i] < 255)
+	if(temp_bins[i] <= 255)
 	    kernel_bins[i] = temp_bins[i];
 	else
 	    kernel_bins[i] = 255;
