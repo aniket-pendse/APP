@@ -5,3 +5,4 @@ The codes in each of the folders belong to my course labs in Applied Parallel Pr
 3. MP3 was 2D convolution
 4. MP4-1 was Reduction operation
 5. MP4-2 was Exclusive scanning Operation
+6. MP5 was Histogramming using Atomic Add
